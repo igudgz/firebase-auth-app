@@ -4,17 +4,28 @@ import Container from "../../components/Container";
 import Input from "../../components/Input";
 import styled from "styled-components";
 
-const LoginContainer = styled.div``;
+const LoginContainer = styled.div`
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  form {
+    width: 350px;
+    > button {
+      width: 100%;
+      margin-top: 24px;
+    }
+  }
+`;
 
 interface errorMsgs {
   email: string;
   password: string;
 }
 
-interface fields {
-  email: string;
-  password: string;
-}
+interface fields extends errorMsgs {}
 
 const Login: React.FC = () => {
   const [fields, setFields] = useState<fields>({
@@ -35,14 +46,26 @@ const Login: React.FC = () => {
         ...errorMsgs,
         email: "Digite seu e-mail!",
       });
+      return;
     }
+
+    setErrorMsgs({
+      ...errorMsgs,
+      email: "",
+    });
 
     if (fields.password === "") {
       setErrorMsgs({
         ...errorMsgs,
         password: "Digite sua senha",
       });
+      return;
     }
+
+    setErrorMsgs({
+      ...errorMsgs,
+      password: "",
+    });
   };
 
   const updateField = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,6 +77,7 @@ const Login: React.FC = () => {
   return (
     <Container>
       <LoginContainer onSubmit={handleSubmit}>
+        <h1>Login</h1>
         <form>
           <Input
             name="email"

@@ -4,10 +4,14 @@ import { ReactComponent as HideIcon } from "../../static/hide-eye-icon.svg";
 import { ReactComponent as ShowIcon } from "../../static/show-eye-icon.svg";
 
 const Container = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
-  width: 300px;
   position: relative;
+
+  :not(:first-child) {
+    margin-top: 24px;
+  }
 `;
 
 const InputStyled = styled.input`
@@ -15,10 +19,15 @@ const InputStyled = styled.input`
   background-color: #f9f8f4;
   border: 1px solid #430066;
   border-radius: 3px;
+  padding: 5px;
+
+  &:focus {
+    outline: 1px solid #430066;
+  }
 `;
 
 const ErrorMessage = styled.span`
-  margin-top: 5px;
+  margin-top: 3px;
   font-size: 14px;
   color: #ff0b0b;
 `;
@@ -26,7 +35,7 @@ const ErrorMessage = styled.span`
 const EyeButton = styled.button`
   position: absolute;
   right: 3px;
-  top: 8px;
+  top: 12px;
   background: none;
   border: none;
 `;
