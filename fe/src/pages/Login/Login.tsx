@@ -6,6 +6,7 @@ import styled from "styled-components";
 
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import auth from "../../utils/firebase/firebase";
+import SignInGithubButton from "./SignInGithubButton";
 
 const LoginContainer = styled.div`
   height: 500px;
@@ -112,6 +113,7 @@ const Login: React.FC = () => {
             onChange={updateField}
           />
           <Button type="submit">Login</Button>
+          <SignInGithubButton />
         </form>
       </LoginContainer>
     </Container>
