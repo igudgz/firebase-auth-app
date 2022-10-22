@@ -1,4 +1,5 @@
 import * as firebase from 'firebase/app'
+import { getAuth } from "firebase/auth";
 import 'firebase/auth'
 import {
   FIREBASE_APIKEY,
@@ -8,7 +9,7 @@ import {
   FIREBASE_MESSAGINGSENDERID,
   FIREBASE_PROJECTID,
   FIREBASE_STORAGEBUCKET,
-} from '../const'
+} from '../const/index'
 
 const firebaseConfig = {
   apiKey: FIREBASE_APIKEY,
@@ -20,6 +21,7 @@ const firebaseConfig = {
   measurementId: FIREBASE_MEASUREMENTID,
 }
 
-firebase.initializeApp(firebaseConfig)
+const app = firebase.initializeApp(firebaseConfig)
+const auth = getAuth(app);
 
-export default firebase
+export default auth

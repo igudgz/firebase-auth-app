@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { SyntheticEvent, useCallback, useState } from "react";
 import Button from "../../components/Button";
 import Container from "../../components/Container";
 import Input from "../../components/Input";
 import styled from "styled-components";
+
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import auth from "../../utils/firebase/firebase";
 
 const LoginContainer = styled.div`
   height: 500px;
@@ -38,35 +41,50 @@ const Login: React.FC = () => {
     password: "",
   });
 
-  const handleSubmit = (e: React.FormEvent<HTMLElement>) => {
-    e.preventDefault();
+  const handleSubmit = useCallback(
+    async (e: SyntheticEvent) => {
+      e.preventDefault();
 
-    if (fields.email === "") {
+      if (fields.email === "") {
+        setErrorMsgs({
+          ...errorMsgs,
+          email: "Digite seu e-mail!",
+        });
+        return;
+      }
+
       setErrorMsgs({
         ...errorMsgs,
-        email: "Digite seu e-mail!",
+        email: "",
       });
-      return;
-    }
 
-    setErrorMsgs({
-      ...errorMsgs,
-      email: "",
-    });
+      if (fields.password === "") {
+        setErrorMsgs({
+          ...errorMsgs,
+          password: "Digite sua senha",
+        });
+        return;
+      }
 
-    if (fields.password === "") {
       setErrorMsgs({
         ...errorMsgs,
-        password: "Digite sua senha",
+        password: "",
       });
-      return;
-    }
 
-    setErrorMsgs({
-      ...errorMsgs,
-      password: "",
-    });
-  };
+      createUserWithEmailAndPassword(auth, fields.email, fields.password)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // ..
+        });
+    },
+    [fields]
+  );
 
   const updateField = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = e;
