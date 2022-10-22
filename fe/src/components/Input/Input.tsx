@@ -40,18 +40,25 @@ const Input: React.FC<Props> = ({
   placeholder,
   errorMessage,
   type,
+  onChange,
 }: Props) => {
   const [show, setShow] = useState<boolean>(false);
 
   return (
     <Container>
       <InputStyled
+        onChange={onChange}
         name={name}
         placeholder={placeholder}
         type={show ? "text" : type}
       />
       {type === "password" && (
-        <EyeButton onClick={() => setShow(!show)}>
+        <EyeButton
+          onClick={(e: React.MouseEvent<HTMLElement>) => {
+            e.preventDefault();
+            setShow(!show);
+          }}
+        >
           {show ? <HideIcon /> : <ShowIcon />}
         </EyeButton>
       )}
