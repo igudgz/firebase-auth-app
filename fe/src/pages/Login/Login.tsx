@@ -1,11 +1,19 @@
-import React, { SyntheticEvent, useCallback, useState } from "react";
+import React, { SyntheticEvent, useCallback, useEffect, useState } from "react";
 import Button from "../../components/Button";
 import Container from "../../components/Container";
 import Input from "../../components/Input";
 import styled from "styled-components";
 
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  GithubAuthProvider,
+  signInWithPopup,
+  linkWithPopup,
+  onAuthStateChanged,
+} from "firebase/auth";
 import auth from "../../utils/firebase/firebase";
+import SignInGithubButton from "./SignInGithubButton";
+import { useNavigate } from "react-router-dom";
 
 const LoginContainer = styled.div`
   height: 500px;
@@ -31,6 +39,7 @@ interface errorMsgs {
 interface fields extends errorMsgs {}
 
 const Login: React.FC = () => {
+  const navigate = useNavigate();
   const [fields, setFields] = useState<fields>({
     email: "",
     password: "",
@@ -41,50 +50,66 @@ const Login: React.FC = () => {
     password: "",
   });
 
-  const handleSubmit = useCallback(
-    async (e: SyntheticEvent) => {
-      e.preventDefault();
-
-      if (fields.email === "") {
-        setErrorMsgs({
-          ...errorMsgs,
-          email: "Digite seu e-mail!",
-        });
-        return;
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigate("/homepage");
       }
+    });
+  }, []);
 
+  const handleSubmit = useCallback(async (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    if (fields.email === "") {
       setErrorMsgs({
         ...errorMsgs,
-        email: "",
+        email: "Digite seu e-mail!",
       });
+      return;
+    }
 
-      if (fields.password === "") {
-        setErrorMsgs({
-          ...errorMsgs,
-          password: "Digite sua senha",
-        });
-        return;
-      }
+    setErrorMsgs({
+      ...errorMsgs,
+      email: "",
+    });
 
+    if (fields.password === "") {
       setErrorMsgs({
         ...errorMsgs,
-        password: "",
+        password: "Digite sua senha",
       });
+      return;
+    }
 
-      createUserWithEmailAndPassword(auth, fields.email, fields.password)
-        .then((userCredential) => {
-          // Signed in
-          const user = userCredential.user;
-          // ...
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          // ..
-        });
-    },
-    [fields]
-  );
+    setErrorMsgs({
+      ...errorMsgs,
+      password: "",
+    });
+
+    createUserWithEmailAndPassword(auth, fields.email, fields.password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+      });
+  }, []);
+
+  const handleSignUpWithGitHub = useCallback(async () => {
+    const provider = new GithubAuthProvider();
+    const currentUser = auth.currentUser;
+
+    const res = currentUser
+      ? await linkWithPopup(currentUser, provider)
+      : await signInWithPopup(auth, provider);
+
+    console.log(res, "oi");
+  }, []);
 
   const updateField = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = e;
@@ -112,6 +137,7 @@ const Login: React.FC = () => {
             onChange={updateField}
           />
           <Button type="submit">Login</Button>
+          <SignInGithubButton onClick={handleSignUpWithGitHub} />
         </form>
       </LoginContainer>
     </Container>
