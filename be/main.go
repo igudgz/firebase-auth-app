@@ -17,5 +17,6 @@ func main() {
 	userRepository := repository.NewUserRepository(db)
 	userUsercase := usecase.NewUserUsecase(userRepository)
 	userHttpDelivery.NewUserHandler(e, userUsercase)
+
 	e.Logger.Fatal(e.Start(":1323"))
 }

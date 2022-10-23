@@ -15,6 +15,10 @@ func NewUserUsecase(entity entity.UserRepository) entity.UserUsecase {
 }
 
 func (u userUsecase) Create(user entity.User) error {
+	if err := user.Validate(); err != nil {
+		return err
+	}
+
 	err := u.userRepo.Create(user)
 	if err != nil {
 		return err
