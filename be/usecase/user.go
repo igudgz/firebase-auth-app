@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"time"
+
 	"github.com/igordgz/bff-cypress/entity"
 )
 
@@ -14,15 +16,18 @@ func NewUserUsecase(entity entity.UserRepository) entity.UserUsecase {
 	}
 }
 
-func (u userUsecase) Create(user entity.User) error {
+func (u userUsecase) Create(user entity.User) (string, error) {
 	if err := user.Validate(); err != nil {
-		return err
+		return "", err
 	}
 
-	err := u.userRepo.Create(user)
+	user.CreatedAt = time.Now()
+	user.UpdatedAt = time.Now()
+
+	id, err := u.userRepo.Create(user)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	return nil
+	return id, nil
 }

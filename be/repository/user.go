@@ -14,7 +14,9 @@ func NewUserRepository(db []entity.User) entity.UserRepository {
 	}
 }
 
-func (u userRepository) Create(user entity.User) error {
+func (u userRepository) Create(user entity.User) (string, error) {
+	user.ID = "1"
 	u.db = append(u.db, user)
-	return nil
+
+	return user.ID, nil
 }

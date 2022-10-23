@@ -28,11 +28,11 @@ func (u *User) Validate() error {
 }
 
 type UserUsecase interface {
-	Create(user User) error
+	Create(user User) (string, error)
 	// GetByID(ctx context.Context, id int64) error
 }
 
 type UserRepository interface {
-	Create(user User) error
+	Create(user User) (string, error)
 	// GetByID(ctx context.Context, id int64) error
 }
