@@ -24,11 +24,19 @@ const LoginContainer = styled.div`
 
   form {
     width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     > button {
       width: 100%;
       margin-top: 24px;
     }
   }
+`;
+
+const SpanText = styled.span`
+  font-size: 12px;
+  margin-top: 5px;
 `;
 
 interface errorMsgs {
@@ -138,6 +146,9 @@ const Login: React.FC = () => {
             type="password"
             onChange={updateField}
           />
+          <SpanText>
+            Nao tem cadastro? <a href="/registration">Cadastre-se</a>
+          </SpanText>
           <Button type="submit">Login</Button>
           <SignInGithubButton onClick={handleSignUpWithGitHub} />
         </form>
