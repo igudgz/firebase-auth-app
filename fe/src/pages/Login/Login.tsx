@@ -124,6 +124,7 @@ const Login: React.FC = () => {
         <form>
           <Input
             name="email"
+            label="Email"
             placeholder="Digite seu e-mail"
             errorMessage={errorMsgs.email && errorMsgs.email}
             type="text"
@@ -131,6 +132,7 @@ const Login: React.FC = () => {
           />
           <Input
             name="password"
+            label="Senha"
             placeholder="Digite sua senha"
             errorMessage={errorMsgs.password && errorMsgs.password}
             type="password"

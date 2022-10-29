@@ -3,11 +3,12 @@ import styled from "styled-components";
 import { ReactComponent as HideIcon } from "../../static/hide-eye-icon.svg";
 import { ReactComponent as ShowIcon } from "../../static/show-eye-icon.svg";
 
-const Container = styled.div`
+const Label = styled.label`
   width: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
+  font-size: 14px;
 
   :not(:first-child) {
     margin-top: 24px;
@@ -16,6 +17,7 @@ const Container = styled.div`
 
 const InputStyled = styled.input`
   height: 40px;
+  margin-top: 5px;
   background-color: #f9f8f4;
   border: 1px solid #430066;
   border-radius: 3px;
@@ -35,18 +37,20 @@ const ErrorMessage = styled.span`
 const EyeButton = styled.button`
   position: absolute;
   right: 3px;
-  top: 12px;
+  top: 36px;
   background: none;
   border: none;
 `;
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
+  label: string;
   errorMessage?: string;
 }
 
 const Input: React.FC<Props> = ({
   name,
   placeholder,
+  label,
   errorMessage,
   type,
   onChange,
@@ -54,7 +58,8 @@ const Input: React.FC<Props> = ({
   const [show, setShow] = useState<boolean>(false);
 
   return (
-    <Container>
+    <Label>
+      {label}
       <InputStyled
         onChange={onChange}
         name={name}
@@ -68,11 +73,11 @@ const Input: React.FC<Props> = ({
             setShow(!show);
           }}
         >
-          {show ? <HideIcon /> : <ShowIcon />}
+          {!show ? <HideIcon /> : <ShowIcon />}
         </EyeButton>
       )}
       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-    </Container>
+    </Label>
   );
 };
 
