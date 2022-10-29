@@ -12,10 +12,10 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import auth from "../../utils/firebase/firebase";
-import SignInGithubButton from "./SignInGithubButton";
 import { useNavigate } from "react-router-dom";
+import Title from "../../components/Title";
 
-const LoginContainer = styled.div`
+const RegistrationContainer = styled.div`
   height: 500px;
   display: flex;
   flex-direction: column;
@@ -46,8 +46,7 @@ interface errorMsgs {
 
 interface fields extends errorMsgs {}
 
-const Login: React.FC = () => {
-  const navigate = useNavigate();
+const Registration: React.FC = () => {
   const [fields, setFields] = useState<fields>({
     email: "",
     password: "",
@@ -57,14 +56,6 @@ const Login: React.FC = () => {
     email: "",
     password: "",
   });
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        navigate("/homepage");
-      }
-    });
-  }, []);
 
   const handleSubmit = useCallback(async (e: SyntheticEvent) => {
     e.preventDefault();
@@ -108,17 +99,6 @@ const Login: React.FC = () => {
       });
   }, []);
 
-  const handleSignUpWithGitHub = useCallback(async () => {
-    const provider = new GithubAuthProvider();
-    const currentUser = auth.currentUser;
-
-    const res = currentUser
-      ? await linkWithPopup(currentUser, provider)
-      : await signInWithPopup(auth, provider);
-
-    console.log(res, "oi");
-  }, []);
-
   const updateField = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = e;
 
@@ -127,13 +107,21 @@ const Login: React.FC = () => {
 
   return (
     <Container>
-      <LoginContainer onSubmit={handleSubmit}>
-        <h1>Login</h1>
+      <RegistrationContainer onSubmit={handleSubmit}>
+        <Title>Cadastro</Title>
         <form>
           <Input
             name="email"
             label="Email"
             placeholder="Digite seu e-mail"
+            errorMessage={errorMsgs.email && errorMsgs.email}
+            type="text"
+            onChange={updateField}
+          />
+          <Input
+            name="nome"
+            label="Nome"
+            placeholder="Digite seu nome"
             errorMessage={errorMsgs.email && errorMsgs.email}
             type="text"
             onChange={updateField}
@@ -147,14 +135,13 @@ const Login: React.FC = () => {
             onChange={updateField}
           />
           <SpanText>
-            Nao tem cadastro? <a href="/cadastro">Cadastre-se</a>
+            Nao tem cadastro? <a href="/registration">Cadastre-se</a>
           </SpanText>
-          <Button type="submit">Login</Button>
-          <SignInGithubButton onClick={handleSignUpWithGitHub} />
+          <Button type="submit">Cadastrar</Button>
         </form>
-      </LoginContainer>
+      </RegistrationContainer>
     </Container>
   );
 };
 
-export { Login };
+export { Registration };
