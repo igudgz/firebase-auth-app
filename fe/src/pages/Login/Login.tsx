@@ -24,11 +24,19 @@ const LoginContainer = styled.div`
 
   form {
     width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     > button {
       width: 100%;
       margin-top: 24px;
     }
   }
+`;
+
+const SpanText = styled.span`
+  font-size: 12px;
+  margin-top: 5px;
 `;
 
 interface errorMsgs {
@@ -124,6 +132,7 @@ const Login: React.FC = () => {
         <form>
           <Input
             name="email"
+            label="Email"
             placeholder="Digite seu e-mail"
             errorMessage={errorMsgs.email && errorMsgs.email}
             type="text"
@@ -131,11 +140,15 @@ const Login: React.FC = () => {
           />
           <Input
             name="password"
+            label="Senha"
             placeholder="Digite sua senha"
             errorMessage={errorMsgs.password && errorMsgs.password}
             type="password"
             onChange={updateField}
           />
+          <SpanText>
+            Nao tem cadastro? <a href="/registration">Cadastre-se</a>
+          </SpanText>
           <Button type="submit">Login</Button>
           <SignInGithubButton onClick={handleSignUpWithGitHub} />
         </form>
